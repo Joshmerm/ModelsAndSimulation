@@ -95,14 +95,25 @@
 
         document.getElementById("main").innerHTML += '<div id="' + count + '" style="display: flex; flex-flow: row;"></div>';
         let setting = document.getElementById(String(count));
-        setting.innerHTML += off(count, 0);
+        set(document.getElementById(count - 1 + "-" + (size - 1)).getAttribute("name"), document.getElementById((count - 1) + "-" + 0).getAttribute("name"), document.getElementById((count - 1) + "-" + 1).getAttribute("name"), setting, 0);
         for(let i = 1; i < size - 1; i++){
 
             let left = document.getElementById((count - 1) + "-" + (i - 1)).getAttribute("name");
             let center = document.getElementById((count - 1) + "-" + i).getAttribute("name");
             let right = document.getElementById((count - 1) + "-" + (i+1)).getAttribute("name");
+            set(left, center, right, setting, i);
+        }
+        set(document.getElementById(count - 1 + "-" + (size - 2)).getAttribute("name"), document.getElementById((count - 1) + "-" + (size-1)).getAttribute("name"), document.getElementById((count - 1) + "-" + 0).getAttribute("name"), setting, size-1);
+        // setting.innerHTML += off(count, size - 1);
+        count++;
+    }
 
-            if(left == "off" && center == "off" && right == "off"){
+    function goTen(){
+        for(let i = 0; i < 10; i++) go();
+    }
+
+    function set(left, center, right, setting, i){
+        if(left == "off" && center == "off" && right == "off"){
                 setting.innerHTML += rules[000] == "off" ? off(count, i) : on(count, i);
             }else if(left == "off" && center == "off" && right == "on"){
                 setting.innerHTML += rules[001] == "off" ? off(count, i) : on(count, i);
@@ -119,14 +130,8 @@
             }else if(left == "on" && center == "on" && right == "on"){
                 setting.innerHTML += rules[111] == "off" ? off(count, i) : on(count, i);
             }
-        }
-        setting.innerHTML += off(count, size - 1);
-        count++;
     }
 
-    function goTen(){
-        for(let i = 0; i < 10; i++) go();
-    }
 </script>
 </body>
 

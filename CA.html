@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Title of the document</title>
+<style>
+    .on {height: 20px; width: 20px; background-color: black; border: 1px solid black;}
+    .off {height: 20px; width: 20px; background-color: white; border: 1px solid black;}
+    </style>
+</head>
+
+<body>
+    <div style="display: flex">
+        <div id="main" style="width: 800px;">
+            <div id="0" style="display: flex; flex-flow: row;"></div>
+        </div>
+        <button style="height: 50px;" onclick="go()"> Go</button>
+        <button style="height: 50px;" onclick="goTen()"> Go 10</button>
+        <input id="rule#" style="height: 50px" type="text" placeholder="110">
+    </div>
+    
+<script>
+    //setup
+    let count = 1;
+    //must be odd
+    const size = 31;
+    //start with rule 110
+    let rules = {
+        000: "off", //1
+        001: "on", //2
+        010: "on", //4
+        011: "on", //8
+        100: "off", //16
+        101: "on", //32
+        110: "on", //64
+        111: "off", //128
+    }
+    function on(one, two){
+        return '<div name="on" id="' + one + '-' + two + '" class="on"></div>';
+        // return "hello";
+    } 
+    function off(one, two){
+        return '<div name="off" id="' + one + '-' + two + '" class="off"></div>';
+        // return "hello";
+    } 
+    for(let i = 0; i < size; i++) document.getElementById("0").innerHTML += i == Math.floor(size/2)  ? on(0, i) : off(0, i);
+
+    function go() {
+
+        if(document.getElementById("rule#").value != ""){
+            rules[000] = "off";
+            rules[001] = "off";
+            rules[010] = "off";
+            rules[011] = "off";
+            rules[100] = "off";
+            rules[101] = "off";
+            rules[110] = "off";
+            rules[111] = "off";
+
+            let ruleNumber = document.getElementById("rule#").value;
+            if(ruleNumber / 128 >= 1){
+                ruleNumber = ruleNumber % 128;
+                rules[111] = "on";
+            }
+            if(ruleNumber / 64 >= 1){
+                ruleNumber = ruleNumber % 64;
+                rules[110] = "on";
+            }
+            if(ruleNumber / 32 >= 1){
+                ruleNumber = ruleNumber % 32;
+                rules[101] = "on";
+            }
+            if(ruleNumber / 16 >= 1){
+                ruleNumber = ruleNumber % 16;
+                rules[100] = "on";
+            }
+            if(ruleNumber / 8 >= 1){
+                ruleNumber = ruleNumber % 8;
+                rules[011] = "on";
+            }
+            if(ruleNumber / 4 >= 1){
+                ruleNumber = ruleNumber % 4;
+                rules[010] = "on";
+            }
+            if(ruleNumber / 2 >= 1){
+                ruleNumber = ruleNumber % 2;
+                rules[001] = "on";
+            }
+            if(ruleNumber / 1 >= 1){
+                ruleNumber = ruleNumber % 1;
+                rules[000] = "on";
+            }
+
+        }
+        console.log("rules", rules);
+
+        document.getElementById("main").innerHTML += '<div id="' + count + '" style="display: flex; flex-flow: row;"></div>';
+        let setting = document.getElementById(String(count));
+        setting.innerHTML += off(count, 0);
+        for(let i = 1; i < size - 1; i++){
+
+            let left = document.getElementById((count - 1) + "-" + (i - 1)).getAttribute("name");
+            let center = document.getElementById((count - 1) + "-" + i).getAttribute("name");
+            let right = document.getElementById((count - 1) + "-" + (i+1)).getAttribute("name");
+
+            if(left == "off" && center == "off" && right == "off"){
+                setting.innerHTML += rules[000] == "off" ? off(count, i) : on(count, i);
+            }else if(left == "off" && center == "off" && right == "on"){
+                setting.innerHTML += rules[001] == "off" ? off(count, i) : on(count, i);
+            }else if(left == "off" && center == "on" && right == "off"){
+                setting.innerHTML += rules[010] == "off" ? off(count, i) : on(count, i);
+            }else if(left == "off" && center == "on" && right == "on"){
+                setting.innerHTML += rules[011] == "off" ? off(count, i) : on(count, i);
+            }else if(left == "on" && center == "off" && right == "off"){
+                setting.innerHTML += rules[100] == "off" ? off(count, i) : on(count, i);
+            }else if(left == "on" && center == "off" && right == "on"){
+                setting.innerHTML += rules[101] == "off" ? off(count, i) : on(count, i);
+            }else if(left == "on" && center == "on" && right == "off"){
+                setting.innerHTML += rules[110] == "off" ? off(count, i) : on(count, i);
+            }else if(left == "on" && center == "on" && right == "on"){
+                setting.innerHTML += rules[111] == "off" ? off(count, i) : on(count, i);
+            }
+        }
+        setting.innerHTML += off(count, size - 1);
+        count++;
+    }
+
+    function goTen(){
+        for(let i = 0; i < 10; i++) go();
+    }
+</script>
+</body>
+
+</html>

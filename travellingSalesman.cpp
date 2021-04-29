@@ -1,7 +1,4 @@
-// A C++ program for Prim's Minimum 
-// Spanning Tree (MST) algorithm. The program is
-// for adjacency matrix representation of the graph
-// #include <bits/stdc++.h>
+// using aco 
 #include <iostream>
 #include <ctime>
 #include<algorithm>
